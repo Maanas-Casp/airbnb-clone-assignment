@@ -10,6 +10,15 @@ This is an Airbnb-like full-stack assignment built with a Next.js + TypeScript f
 
 This README describes how to run, seed, test, and prepare the app for deployment using the actual commands present in this repository.
 
+## 🚀 Live Deployment
+
+| Component | Platform | Link |
+|---|---|---|
+| Frontend | Vercel | [Open Application](https://airbnb-clone-assignment-chi.vercel.app/) |
+| Backend API | Render | [Open API](https://airbnb-clone-assignment.onrender.com/) |
+| API Documentation | FastAPI / Swagger | [Open Swagger Docs](https://airbnb-clone-assignment.onrender.com/docs) |
+
+
 ---
 
 ## 2. Features (Implemented)
