@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --brand-primary: #FF385C;
+    --brand-hover: #E00B41;
+    --text-primary: #222222;
+    --text-secondary: #717171;
+    --bg-main: #FFFFFF;
+    --bg-secondary: #F7F7F7;
+    --border-light: #EBEBEB;
+    --border-medium: #DDDDDD;
+    --shadow-card: 0 6px 16px rgba(0, 0, 0, 0.08);
+    --shadow-modal: 0 12px 28px rgba(0, 0, 0, 0.15);
+  }
+
+  body {
+    color: var(--text-primary);
+    background-color: var(--bg-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Glassmorphism & Modals */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.airbnb-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.airbnb-card:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #FF385C 0%, #E00B41 100%);
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 12px 24px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(255, 56, 92, 0.2);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #E00B41 0%, #D70466 100%);
+  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.35);
+}
+
+.btn-secondary {
+  background: #222222;
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 12px 24px;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+  background: #000000;
+}
+
+.btn-outline {
+  border: 1px solid #222222;
+  color: #222222;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 12px 24px;
+  transition: all 0.2s ease;
+}
+.btn-outline:hover {
+  background: #f7f7f7;
+}
+
+/* Category Filter Bar Hide Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

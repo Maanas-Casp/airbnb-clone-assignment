@@ -1,0 +1,23 @@
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/.turbo/
+frontend/out/
+
+# Python / FastAPI
+backend/venv/
+backend/.venv/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+
+# Local runtime / env
+.env
+.env.*
+*.log
+*.db
+*.sqlite3
+.DS_Store
+
+# Local build artifacts
+backend/airbnb_app.db
