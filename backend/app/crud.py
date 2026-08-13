@@ -236,6 +236,25 @@ def get_user_bookings(db: Session, user_id: int) -> List[Booking]:
     ).order_by(Booking.check_in.desc()).all()
 
 
+def cancel_booking(db: Session, booking_id: int) -> Optional[Booking]:
+    """Mark a booking as cancelled. Returns the updated booking or None if not found."""
+    booking = db.query(Booking).options(
+        joinedload(Booking.listing).joinedload(Listing.images)
+    ).filter(Booking.id == booking_id).first()
+    if not booking:
+        return None
+
+    # Idempotent: if already cancelled, return as-is
+    if booking.status == "cancelled":
+        return booking
+
+    booking.status = "cancelled"
+    db.add(booking)
+    db.commit()
+    db.refresh(booking)
+    return booking
+
+
 def get_host_listings(db: Session, host_id: int) -> List[Listing]:
     return db.query(Listing).options(
         joinedload(Listing.images),

@@ -10,9 +10,10 @@ import { ToastContainer } from '@/components/Toast';
 import { Briefcase, Calendar, MapPin, Users, CheckCircle, ChevronRight, Home } from 'lucide-react';
 
 export default function MyTripsPage() {
-  const { activeUserId } = useUser();
+  const { activeUserId, showToast } = useUser();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [cancellingId, setCancellingId] = useState<number | null>(null);
 
   useEffect(() => {
     async function loadTrips() {
@@ -28,6 +29,24 @@ export default function MyTripsPage() {
     }
     loadTrips();
   }, [activeUserId]);
+
+  const handleCancel = async (bookingId: number) => {
+    const confirmed = window.confirm('Are you sure you want to cancel this booking?');
+    if (!confirmed) return;
+    try {
+      setCancellingId(bookingId);
+    await api.cancelBooking(bookingId, activeUserId);
+      showToast('Booking cancelled successfully.', 'success');
+      // Refresh trips
+      const data = await api.getMyTrips(activeUserId);
+      setBookings(data);
+    } catch (err: any) {
+      console.error('Failed to cancel booking', err);
+      showToast(err?.message || 'Failed to cancel booking', 'error');
+    } finally {
+      setCancellingId(null);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -132,13 +151,26 @@ export default function MyTripsPage() {
 
                   {/* Footer Link */}
                   {listing && (
-                    <Link
-                      href={`/listings/${listing.id}`}
-                      className="inline-flex items-center justify-between text-xs font-bold text-gray-700 hover:text-[#FF385C] transition-colors pt-1"
-                    >
-                      <span>View property details</span>
-                      <ChevronRight className="w-4 h-4" />
-                    </Link>
+                    <div className="flex items-center justify-between gap-4 pt-1">
+                      <Link
+                        href={`/listings/${listing.id}`}
+                        className="inline-flex items-center gap-2 text-xs font-bold text-gray-700 hover:text-[#FF385C] transition-colors"
+                      >
+                        <span>View property details</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </Link>
+
+                      {/* Cancel button: only for confirmed future bookings */}
+                      {booking.status === 'confirmed' && new Date(booking.check_in) > new Date() && (
+                        <button
+                          onClick={() => handleCancel(booking.id)}
+                          disabled={cancellingId === booking.id}
+                          className="text-xs font-semibold text-rose-600 hover:text-white hover:bg-rose-600 px-3 py-2 rounded-md transition-colors"
+                        >
+                          {cancellingId === booking.id ? 'Cancelling...' : 'Cancel booking'}
+                        </button>
+                      )}
+                    </div>
                   )}
 
                 </div>

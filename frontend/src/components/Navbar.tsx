@@ -129,15 +129,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, searchSummary }) =
                     )}
                   </Link>
 
-                  <Link
-                    href="/host"
-                    className={`flex items-center gap-3 px-4 py-3 text-sm font-medium hover:bg-gray-50 ${
-                      pathname === '/host' ? 'text-[#FF385C] font-semibold' : 'text-gray-700'
-                    }`}
-                  >
-                    <Home className="w-4 h-4" />
-                    Host Dashboard & Listings
-                  </Link>
+                  {role === 'host' && (
+                    <Link
+                      href="/host"
+                      className={`flex items-center gap-3 px-4 py-3 text-sm font-medium hover:bg-gray-50 ${
+                        pathname === '/host' ? 'text-[#FF385C] font-semibold' : 'text-gray-700'
+                      }`}
+                    >
+                      <Home className="w-4 h-4" />
+                      Host Dashboard & Listings
+                    </Link>
+                  )}
 
                   <div className="border-t border-gray-100 my-1"></div>
 

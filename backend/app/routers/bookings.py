@@ -4,6 +4,7 @@ from typing import List
 
 from app.database import get_db
 from app import crud, schemas
+from app.models import Booking
 
 router = APIRouter(prefix="/api/bookings", tags=["Bookings"])
 
@@ -42,3 +43,27 @@ def get_property_availability(listing_id: int, db: Session = Depends(get_db)):
         {"check_in": b.check_in, "check_out": b.check_out}
         for b in bookings
     ]
+
+
+@router.post("/{booking_id}/cancel", response_model=schemas.BookingOut)
+def cancel_booking(booking_id: int, guest_id: int = Query(..., description="ID of cancelling guest"), db: Session = Depends(get_db)):
+    """Cancel a booking by marking its status as 'cancelled'.
+
+    This endpoint requires the caller to provide the guest_id of the user attempting the cancellation
+    (mock personas). The booking can only be cancelled by its owner (booking.guest_id).
+    """
+    booking = db.query(Booking).filter(Booking.id == booking_id).first()
+    if not booking:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Booking not found")
+
+    # Validate ownership
+    if booking.guest_id != guest_id:
+        # Do not reveal booking existence details unnecessarily; use 403 Forbidden to indicate lack of permission
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You may only cancel your own bookings")
+
+    # Delegate to CRUD which handles idempotent cancellation
+    updated = crud.cancel_booking(db, booking_id=booking_id)
+    if not updated:
+        # Should not happen since we already loaded booking, but guard
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to cancel booking")
+    return updated

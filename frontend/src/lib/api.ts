@@ -117,6 +117,13 @@ export const api = {
     return fetchAPI<AvailabilityRange[]>(`/api/bookings/listings/${listingId}/availability`);
   },
 
+  cancelBooking: async (bookingId: number, guestId: number): Promise<Booking> => {
+    // Pass guestId as a query parameter to validate ownership on the backend (mock persona)
+    return fetchAPI<Booking>(`/api/bookings/${bookingId}/cancel?guest_id=${guestId}`, {
+      method: 'POST',
+    });
+  },
+
   // --- Host ---
   getHostListings: async (hostId: number = 2): Promise<Listing[]> => {
     return fetchAPI<Listing[]>(`/api/host/listings?host_id=${hostId}`);
